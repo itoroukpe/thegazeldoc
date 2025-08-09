@@ -252,4 +252,237 @@ See which queries bring users to your site
 Identify and fix technical SEO issues
 Track your indexing coverage over time
 The sitemap will help Google understand your site structure and ensure your financial management and tax-related pages get properly indexed for relevant search queries.
+---
+Awesome—let’s make [www.thegazel.com](http://www.thegazel.com) SEO-strong with a practical, step-by-step plan you can run like a project. I’ll assume you can edit code/CMS and deploy.
+
+# Step 0 — Wire up measurement (same day)
+
+1. Create/verify accounts: Google Analytics 4 (GA4), Google Search Console (GSC), Bing Webmaster Tools.
+2. In GSC: set preferred domain (www vs non-www), submit your XML sitemap (we’ll create it in Step 2).
+3. In GA4: define key events (signup, start-trial, connect-bank, receipt-upload, checkout) and mark them as conversions.
+4. Create dashboards for: organic sessions, non-brand clicks, top landing pages, conversions, and Core Web Vitals.
+
+# Step 1 — Crawl & baseline audit (day 1–2)
+
+Use Screaming Frog or Sitebulb (free/low-cost works):
+
+* Find: non-200 pages, broken links, missing/duplicate titles/H1s, thin pages, non-indexed pages, orphan pages.
+* Export issues and turn them into tickets (P0 indexability, P1 content duplicates, P2 hygiene).
+
+# Step 2 — Indexability & foundation (week 1 quick wins)
+
+**Robots, sitemap, canonicals, redirects, HTTPS, trailing slash, one hostname.**
+
+**robots.txt (example):**
+
+```
+User-agent: *
+Disallow: /admin/
+Disallow: /api/
+Allow: /
+
+Sitemap: https://www.thegazel.com/sitemap.xml
+```
+
+**Canonical tag (in <head>):**
+
+```html
+<link rel="canonical" href="https://www.thegazel.com/current-page-url/" />
+```
+
+**Sitemap basics:**
+
+* One main `sitemap.xml` that references child sitemaps (pages, blog, docs).
+* Include only canonical 200 URLs. Update on deploy.
+
+**Redirects:**
+
+* Force HTTPS and one canonical host (301 from http → https, non-www → www or vice-versa).
+* Map 404s to best-fit pages or 410 if intentionally removed.
+
+# Step 3 — Performance & Core Web Vitals (week 1–2)
+
+Target: LCP < 2.5s, INP < 200ms, CLS < 0.1.
+
+* Images: compress, next-gen (`.webp`), `loading="lazy"`, sized dimensions.
+* Fonts: self-host, `font-display: swap`, preconnect to CDN, limit weights.
+* JS: ship only what’s needed; split/chunk, defer non-critical, remove dead code.
+* CSS: inline critical CSS on above-the-fold, purge unused utility classes.
+* If SPA/React: prefer SSR/SSG (Next.js) or prerender marketing pages. Ensure bots receive HTML.
+
+# Step 4 — Information architecture (week 1–2)
+
+Design clear topic clusters that match how people search. For The Gazel (finance/tax SaaS), a solid structure is:
+
+* /features/ (receipt-scanner, mileage-tracker, bank-sync, AI-deductions, reports)
+* /solutions/ (individuals, small-business, nonprofits, rideshare)
+* /pricing/
+* /compare/ (gazel-vs-quickbooks, …)
+* /resources/ (blog, calculators, tax-calendar)
+* /country/ (us, uk, eu, nigeria, ghana) with localized content and compliance notes
+  Link clusters internally (pillar ↔ feature ↔ blog) using descriptive anchor text.
+
+# Step 5 — On-page optimization (ongoing, start week 2)
+
+For every indexable page:
+
+* One H1 that states the topic.
+* Title tag ≤ 60 chars, includes primary keyword + value prop.
+* Meta description ≤ 155–160 chars, compelling CTA.
+* Headers (H2/H3) that align to sub-topics and questions.
+* Media with descriptive alt text.
+* FAQ section where natural (eligible for rich results).
+* Clear primary CTA above the fold.
+
+**Dynamic title/meta patterns (examples):**
+
+* Home: “The Gazel – Smart Tax & Expense Tracker for Individuals and Small Businesses”
+* Feature page: “Receipt Scanner – Turn Receipts into Deductions | The Gazel”
+* Country page: “Tax & Expense App for the UK: HMRC-Friendly Tracking | The Gazel”
+
+# Step 6 — Structured data (week 2)
+
+Add JSON-LD (site-wide and per-template) to earn rich results and boost E-E-A-T.
+
+**Organization + Website (site-wide):**
+
+```html
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"Organization",
+  "name":"The Gazel",
+  "url":"https://www.thegazel.com/",
+  "logo":"https://www.thegazel.com/assets/logo.png",
+  "sameAs":["https://www.linkedin.com/company/thegazel"]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"WebSite",
+  "url":"https://www.thegazel.com/",
+  "potentialAction":{
+    "@type":"SearchAction",
+    "target":"https://www.thegazel.com/search?q={query}",
+    "query-input":"required name=query"
+  }
+}
+</script>
+```
+
+**SoftwareApplication (product page):**
+
+```html
+<script type="application/ld+json">
+{
+ "@context":"https://schema.org",
+ "@type":"SoftwareApplication",
+ "name":"The Gazel",
+ "applicationCategory":"FinanceApplication",
+ "operatingSystem":"Web, iOS, Android",
+ "offers":{"@type":"Offer","price":"9.99","priceCurrency":"USD"}
+}
+</script>
+```
+
+**FAQPage (for FAQs):**
+
+```html
+<script type="application/ld+json">
+{
+ "@context":"https://schema.org",
+ "@type":"FAQPage",
+ "mainEntity":[
+  {"@type":"Question","name":"How does The Gazel find deductions?","acceptedAnswer":{"@type":"Answer","text":"It analyzes categorized transactions and receipts to match allowable deductions."}}
+ ]
+}
+</script>
+```
+
+# Step 7 — International & regional SEO (week 2–3)
+
+If you serve US/UK/EU/Nigeria/Ghana:
+
+* Use subfolders: `/us/`, `/uk/`, `/eu/`, `/ng/`, `/gh/`.
+* Localize copy, currency, tax terms, legal notices, contact info.
+* Implement `hreflang` on every localized page:
+
+```html
+<link rel="alternate" href="https://www.thegazel.com/us/" hreflang="en-us" />
+<link rel="alternate" href="https://www.thegazel.com/uk/" hreflang="en-gb" />
+<link rel="alternate" href="https://www.thegazel.com/eu/" hreflang="en" />
+<link rel="alternate" href="https://www.thegazel.com/"  hreflang="x-default" />
+```
+
+* Country landing pages should target local keywords (e.g., “Making Tax Digital expense tracker” in the UK).
+
+# Step 8 — Content strategy that wins (start week 2; ongoing weekly)
+
+Do simple keyword research (GSC Queries, People-Also-Ask, Keyword Planner). Build **pillar pages** and **supporting posts**.
+
+Example clusters for The Gazel:
+
+* Pillar: “Small Business Tax Deductions Guide (US/UK/NG/GH)”
+
+  * Posts: “What Receipts to Keep for Taxes”, “Mileage Deduction: How It Works”, “Per-Diem vs Actuals”, “1099 Tax Checklist”, “UK MTD: What You Need”.
+* Pillar: “Expense Tracking for Rideshare Drivers”
+
+  * Posts: “Uber/Lyft Tax Deductions”, “Best Way to Track Mileage”, “Receipts vs Bank Data”.
+* Tools/Calculators (link magnets): “Mileage Deduction Calculator”, “Quarterly Tax Estimator (US/UK)”.
+
+Editorial rules:
+
+* One primary keyword + 3–5 close variants per page.
+* Add author name, credentials, publish/update dates, sources—this is YMYL content (finance/tax), so E-E-A-T matters.
+* Strong internal links to features and conversion pages.
+
+# Step 9 — Conversion SEO (week 3)
+
+* Add comparison pages (vs QuickBooks, vs FreshBooks) with objective feature tables.
+* Place CTAs in hero, mid-page, and end.
+* Add social proof: testimonials, logos, trust/security notes (bank-level encryption, data privacy).
+* Create lead magnets (PDF guides, calculators) and capture email → nurture.
+
+# Step 10 — Off-page & digital PR (week 3–ongoing)
+
+* Publish unique data studies (e.g., anonymized “Top 10 overlooked deductions for freelancers”) and pitch to finance/SMB publications.
+* Guest posts on reputable accounting/tax blogs; seek podcast spots.
+* Create integration pages (e.g., “Connect The Gazel with Plaid/QuickBooks”) and get listed on partners’ directories.
+* Local/business directories with consistent NAP if you maintain a company location.
+
+# Step 11 — Accessibility & UX signals (ongoing)
+
+* Proper color contrast, keyboard navigation, descriptive links, ARIA labels.
+* Clear nav, table of contents on long guides, breadcrumbs (`BreadcrumbList` schema).
+* Fast, stable layouts; avoid intrusive interstitials.
+
+# Step 12 — Governance & hygiene (monthly)
+
+* Content updates: refresh top posts quarterly with new stats, examples, and last-updated date.
+* Link maintenance: fix broken links, update internal links to new content.
+* Log file/analytics review: identify crawl waste, under-linked pages, and fast-follower topics.
+* Add spam protection to forms; thin/duplicate pages → consolidate or `noindex`.
+
+# Quick-win checklist (first 7–10 days)
+
+* [ ] Force HTTPS + single canonical host
+* [ ] Robots.txt + XML sitemap live & submitted
+* [ ] Fix 404s/redirect chains
+* [ ] Titles/H1s filled + unique on top 25 pages
+* [ ] Add Organization, WebSite, and SoftwareApplication schema
+* [ ] Publish 2–3 high-intent pages (Pricing, Compare, Feature) with FAQs
+* [ ] Improve LCP on home to <2.5s (optimize hero image/fonts)
+* [ ] Set up GA4 conversions + GSC
+
+# What to work on every week
+
+* Publish at least 1 pillar or 2 cluster posts.
+* Build 2–5 quality links (guest post, partner listing, digital PR).
+* Improve one Core Web Vital on a key page.
+* Iterate internal linking: new posts link to features/solutions; features link back to posts.
+
+---
+
+If you want, share your current sitemap and top 10 URLs, and I’ll map exact title tags, meta descriptions, and internal link targets for each—plus identify the fastest Core Web Vitals wins on your homepage.
 
